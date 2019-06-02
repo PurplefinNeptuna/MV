@@ -41,30 +41,45 @@ public class Timer {
 public class GameScript : MonoBehaviour {
 	public Camera GameMainCamera;
 	public Canvas GameUICanvas;
+	[HideInInspector]
 	public GameScriptData data;
 	public bool testMode = false;
 	public GameObject testRoom;
 	public GameObject playerPrefab;
+	[HideInInspector]
 	public GameObject player;
 	[HideInInspector]
 	public Player playerPlayer;
+	[HideInInspector]
 	public Vector2Int playerLocalChunkPos;
+	[HideInInspector]
 	public string lastRoom;
+	[HideInInspector]
 	public string lastSpawn;
+	[HideInInspector]
 	public int lastMaxHealth;
 	public int score = 0;
+	[HideInInspector]
 	public int finalScore = 0;
+	[HideInInspector]
 	public Timer gameTimer;
+	[HideInInspector]
 	public float startTime = 0;
+	[HideInInspector]
 	public bool dead = false;
+	[HideInInspector]
 	public bool win = false;
 	public GameObject VCamPlayer;
 	public GameObject VBossBattle;
+	[HideInInspector]
 	public GameObject room;
 	public GameObject healthDrop;
+	[HideInInspector]
 	public ContactFilter2D playerContact;
+	[HideInInspector]
 	public Grid grid;
 	public Dictionary<Vector3Int, WorldTile> tiles;
+	[HideInInspector]
 	public List<WorldTile> teleporter;
 	public Text scoreText;
 	public GameObject gameOverPanel;
@@ -74,11 +89,15 @@ public class GameScript : MonoBehaviour {
 	public LayerMask enemyLayer;
 	public LayerMask groundLayer;
 	public TileBase trapperTile;
+	[HideInInspector]
 	public bool bossBattle;
+	[HideInInspector]
 	public BaseEnemy bossEnemy;
 	public bool haltGame = false;
+	[HideInInspector]
 	private bool playerTrapped;
 	private List<Vector3Int> trapperTiles = new List<Vector3Int>();
+	[HideInInspector]
 	private Vector3 playerPosDelta;
 	private ChunkData[, ] savedMap;
 
@@ -98,6 +117,12 @@ public class GameScript : MonoBehaviour {
 		groundLayer = LayerMask.GetMask("Ground");
 		playerContact.useTriggers = false;
 		playerContact.SetLayerMask(playerLayer);
+
+		if (player == null) {
+			player = Instantiate<GameObject>(playerPrefab, Vector3.zero, Quaternion.identity);
+			player.name = playerPrefab.name;
+			player.transform.SetAsFirstSibling();
+		}
 		playerPlayer = player.GetComponent<Player>();
 
 		//SAVE MINIMAP HERE

@@ -5,8 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(GameScript))]
 [RequireComponent(typeof(WorldManager))]
 [RequireComponent(typeof(RoomManager))]
-[RequireComponent(typeof(MusicManager))]
-[RequireComponent(typeof(SoundManager))]
 public class MVMain : MonoBehaviour {
 	public static GameScript Core;
 	public static WorldManager World;
