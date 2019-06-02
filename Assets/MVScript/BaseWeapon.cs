@@ -28,7 +28,7 @@ public class BaseWeapon {
 
 	public Player Player {
 		get {
-			return GameScript.main.playerPlayer;
+			return MVMain.Core.playerPlayer;
 		}
 	}
 

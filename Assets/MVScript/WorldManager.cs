@@ -128,7 +128,7 @@ public class ChunkData {
 }
 
 public class WorldManager : MonoBehaviour {
-	public static WorldManager main;
+	//public static WorldManager main;
 
 	public ChunkData[, ] map;
 	public Vector2Int startScan;
@@ -147,7 +147,7 @@ public class WorldManager : MonoBehaviour {
 	}
 
 	private void Scan() {
-		foreach (var room in RoomManager.main.rooms) {
+		foreach (var room in MVMain.Room.rooms) {
 			string debugString = room.Key + " : ";
 			foreach (var receiver in room.Value.receivers) {
 				debugString += receiver.name + " ";
@@ -156,14 +156,14 @@ public class WorldManager : MonoBehaviour {
 		}
 		roomQueue = new Queue<Tuple<string, Vector2Int>>();
 		roomQueueList = new HashSet<string>();
-		string startMap = RoomManager.main.activeRoomName;
+		string startMap = MVMain.Room.activeRoomName;
 		roomQueue.Enqueue(new Tuple<string, Vector2Int>(startMap, startScan));
 		roomQueueList.Add(startMap);
 		while (roomQueue.Count > 0) {
 			var now = roomQueue.Dequeue();
 			roomPos.Add(now.Item1, now.Item2);
-			if (RoomManager.main.rooms.ContainsKey(now.Item1)) {
-				RoomData roomNow = RoomManager.main.rooms[now.Item1];
+			if (MVMain.Room.rooms.ContainsKey(now.Item1)) {
+				RoomData roomNow = MVMain.Room.rooms[now.Item1];
 				for (int i = 0; i < roomNow.chunkSize.x; i++) {
 					for (int j = 0; j < roomNow.chunkSize.y; j++) {
 						ChunkData nowChunk = map[now.Item2.x + i, now.Item2.y + j];
@@ -219,9 +219,9 @@ public class WorldManager : MonoBehaviour {
 					nowChunk.SetSmall(connector.teleporterDirection);
 
 					if (!roomQueueList.Contains(connector.targetRoom)) {
-						Vector2Int nextPos = now.Item2 + connector.chunkPos + GameUtility.DirectionToVector2Int(connector.teleporterDirection);
-						if (RoomManager.main.rooms.ContainsKey(connector.targetRoom)) {
-							RoomData nextRoom = RoomManager.main.rooms[connector.targetRoom];
+						Vector2Int nextPos = now.Item2 + connector.chunkPos + MVUtility.DirectionToVector2Int(connector.teleporterDirection);
+						if (MVMain.Room.rooms.ContainsKey(connector.targetRoom)) {
+							RoomData nextRoom = MVMain.Room.rooms[connector.targetRoom];
 							ReceiverData nextReceiver = nextRoom.receivers.FirstOrDefault(x => x.name == connector.targetTeleporter);
 							nextPos -= nextReceiver.chunkPos;
 							roomQueue.Enqueue(new Tuple<string, Vector2Int>(nextRoom.name, nextPos));
@@ -265,10 +265,10 @@ public class WorldManager : MonoBehaviour {
 	}
 
 	private void Awake() {
-		if (main == null) {
-			main = this;
+		if (MVMain.World == null) {
+			MVMain.World = this;
 		}
-		else if (main != this) {
+		else if (MVMain.World != this) {
 			Destroy(gameObject);
 		}
 

@@ -20,7 +20,7 @@ public class BasePickup : BaseObject {
 	}
 
 	protected override void POStart() {
-		if (oneTimeOnly && WorldManager.main.GetMarker(RoomManager.main.activeRoomName, GameScript.main.GetLocalChunkPos(rb2d.position)) == defaultName) {
+		if (oneTimeOnly && MVMain.World.GetMarker(MVMain.Room.activeRoomName, MVMain.Core.GetLocalChunkPos(rb2d.position)) == defaultName) {
 			Destroy(gameObject);
 		}
 	}
@@ -34,33 +34,33 @@ public class BasePickup : BaseObject {
 			}
 			velocity = Vector2.zero;
 		}
-		if (!GameScript.main.haltGame)
+		if (!MVMain.Core.haltGame)
 			PickupUpdate(Time.deltaTime);
 	}
 
 	protected override void POFixedUpdate() {
-		if (!GameScript.main.dead) {
-			int count = rb2d.OverlapCollider(GameScript.main.playerContact, overlapPlayer);
+		if (!MVMain.Core.dead) {
+			int count = rb2d.OverlapCollider(MVMain.Core.playerContact, overlapPlayer);
 			if (count > 0) {
 				if (showOnMap && !showOnDestroyOnly) {
-					Vector2Int chunkPos = GameScript.main.GetLocalChunkPos(rb2d.position);
+					Vector2Int chunkPos = MVMain.Core.GetLocalChunkPos(rb2d.position);
 					Color color = GetComponent<SpriteRenderer>().color;
-					WorldManager.main.SetMarker(defaultName, RoomManager.main.activeRoomName, chunkPos, color);
-					if (WorldManager.main.map != null){
+					MVMain.World.SetMarker(defaultName, MVMain.Room.activeRoomName, chunkPos, color);
+					if (MVMain.World.map != null){
 						//UIManager.main.ForceRefreshMinimap();
 					}
 				}
-				OnHitPlayer(GameScript.main.playerPlayer);
+				OnHitPlayer(MVMain.Core.playerPlayer);
 			}
 		}
 	}
 
 	private void OnDestroy() {
 		if (showOnMap && showOnDestroyOnly && forcedDestroy) {
-			Vector2Int chunkPos = GameScript.main.GetLocalChunkPos(rb2d.position);
+			Vector2Int chunkPos = MVMain.Core.GetLocalChunkPos(rb2d.position);
 			Color color = GetComponent<SpriteRenderer>().color;
-			WorldManager.main.SetMarker(defaultName, RoomManager.main.activeRoomName, chunkPos, color);
-			if (WorldManager.main.map != null){
+			MVMain.World.SetMarker(defaultName, MVMain.Room.activeRoomName, chunkPos, color);
+			if (MVMain.World.map != null){
 				//UIManager.main.ForceRefreshMinimap();
 			}
 		}

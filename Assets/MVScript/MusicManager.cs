@@ -5,21 +5,14 @@ using UnityEngine;
 public class MusicManager : MonoBehaviour {
 
 	#region static
-	public static MusicManager main;
 
 	private void Awake() {
-		if (main == null) {
-			main = this;
+		if (MVMain.Music == null) {
+			MVMain.Music = this;
 		}
-		else if (main != this) {
+		else if (MVMain.Music != this) {
 			Destroy(gameObject);
 		}
-
-		DontDestroyOnLoad(gameObject);
-	}
-
-	public static void Play(string musicName) {
-		main?.PlayMusic(musicName);
 	}
 	#endregion
 
@@ -29,7 +22,7 @@ public class MusicManager : MonoBehaviour {
 		audioSource = GetComponent<AudioSource>();
 	}
 
-	private void PlayMusic(string musicName) {
+	public void Play(string musicName) {
 		if (musicName != audioSource.clip?.name) {
 			MusicData music = Resources.Load<MusicData>("MusicData/" + musicName);
 			if (music == null)

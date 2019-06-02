@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyManager {
-	public static GameObject Spawn(Vector2 worldPos, string enemyName = "Spike", string behaviourName = "Spike", string layer = "Enemy") {
+	public GameObject Spawn(Vector2 worldPos, string enemyName = "Spike", string behaviourName = "Spike", string layer = "Enemy") {
 		Type type;
 		GameObject prefab = Resources.Load<GameObject>("Prefabs/EnemyShapes/" + enemyName);
 		try {
@@ -14,7 +14,7 @@ public class EnemyManager {
 			//type = typeof(Spike);
 			return null;
 		}
-		GameObject result = GameObject.Instantiate<GameObject>(prefab, worldPos, Quaternion.identity, GameScript.main.room.transform);
+		GameObject result = GameObject.Instantiate<GameObject>(prefab, worldPos, Quaternion.identity, MVMain.Core.room.transform);
 		result.AddComponent(type);
 		result.layer = LayerMask.NameToLayer(layer);
 		return result;

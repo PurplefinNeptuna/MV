@@ -5,17 +5,17 @@ using System.Linq;
 using UnityEngine;
 
 public class RoomManager : MonoBehaviour {
-	public static RoomManager main;
+	//public static RoomManager main;
 	public Dictionary<string, RoomData> rooms;
 	public string activeRoomName = "Room0";
 	public RoomData activeRoomData;
 	public string spawnFrom = "O0";
 
 	private void Awake() {
-		if (main == null) {
-			main = this;
+		if (MVMain.Room == null) {
+			MVMain.Room = this;
 		}
-		else if (main != this) {
+		else if (MVMain.Room != this) {
 			Destroy(gameObject);
 		}
 
@@ -48,6 +48,6 @@ public class RoomManager : MonoBehaviour {
 	}
 
 	public Vector2Int GetLocalChunkPos(Vector3Int pos) {
-		return GameUtility.TilePosToLocalChunkPos(pos.x, pos.y, activeRoomData.chunkTopLeft, new Vector2Int(24, 16));
+		return MVUtility.TilePosToLocalChunkPos(pos.x, pos.y, activeRoomData.chunkTopLeft, new Vector2Int(24, 16));
 	}
 }

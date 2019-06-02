@@ -43,7 +43,7 @@ public class BaseObject : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
-		if (localHaltPhysics || GameScript.main.haltGame)
+		if (localHaltPhysics || MVMain.Core.haltGame)
 			return;
 
 		fixedDeltaTime = Time.fixedDeltaTime;

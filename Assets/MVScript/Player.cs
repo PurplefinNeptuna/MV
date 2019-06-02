@@ -78,7 +78,7 @@ public class Player : BaseObject {
 	}
 
 	private void Update() {
-		if (GameScript.main.haltGame) {
+		if (MVMain.Core.haltGame) {
 			animator.speed = 0;
 			return;
 		}
@@ -118,7 +118,7 @@ public class Player : BaseObject {
 		}
 		#endregion
 
-		if (!GameUtility.Leq0(weaponAttackMovingPenalty)) {
+		if (!MVUtility.Leq0(weaponAttackMovingPenalty)) {
 			weaponAttackMovingPenalty -= deltaTime;
 		}
 
@@ -153,7 +153,7 @@ public class Player : BaseObject {
 
 		if (!weaponCanRecharge && weaponRechargeDelayStart) {
 			weaponRechargeDelay -= deltaTime;
-			if (GameUtility.Leq0(weaponRechargeDelay)) {
+			if (MVUtility.Leq0(weaponRechargeDelay)) {
 				weaponRechargeDelay = weaponRechargeDelayMax;
 				weaponRechargeDelayStart = false;
 				weaponCanRecharge = true;
@@ -195,9 +195,9 @@ public class Player : BaseObject {
 			return;
 		if (!invincible || ignoreInvincible) {
 			if (playSound)
-				SoundManager.Play("hit1", 1.5f, 1);
+				MVMain.Sound.Play("hit1", 1.5f, 1);
 
-			int damageF = Mathf.RoundToInt((float) damage * DifficultyManager.difficulty);
+			int damageF = Mathf.RoundToInt((float) damage * MVMain.Difficulty.difficulty);
 			if (damage > 0)
 				damageF = Mathf.Max(1, damageF);
 
@@ -216,7 +216,7 @@ public class Player : BaseObject {
 				//GameUtility.SpawnPopupText("-" + damageF.ToString(), rb2d.position + Random.insideUnitCircle * 0.25f, Color.red);
 			}
 
-			if (!GameUtility.Leq0(knockbackMultiplier))
+			if (!MVUtility.Leq0(knockbackMultiplier))
 				Knockback(direction, knockbackMultiplier);
 		}
 	}
@@ -228,22 +228,22 @@ public class Player : BaseObject {
 
 	public void GetBuff(string name) {
 		if (!buffs.ContainsKey(name)) {
-			BasePlayerBuff newBuff = GameUtility.CreatePlayerBuff(name, this);
+			BasePlayerBuff newBuff = MVUtility.CreatePlayerBuff(name, this);
 			buffs.Add(newBuff.name, newBuff);
 		}
 	}
 
 	public void Dead() {
-		GameScript.main.GameOver();
+		MVMain.Core.GameOver();
 		Destroy(gameObject);
 	}
 
 	private void OnTriggerStay2D(Collider2D collision) {
-		Vector3Int pos = GameScript.main.grid.WorldToCell(rb2d.position);
-		WorldTile teleporter = GameScript.main.teleporter.FirstOrDefault(x => x.localPlace == pos);
+		Vector3Int pos = MVMain.Core.grid.WorldToCell(rb2d.position);
+		WorldTile teleporter = MVMain.Core.teleporter.FirstOrDefault(x => x.localPlace == pos);
 		if (teleporter != null) {
 			if (teleporter.name[0] == 'I') {
-				GameScript.main.Teleport(teleporter);
+				MVMain.Core.Teleport(teleporter);
 			}
 		}
 	}
@@ -259,7 +259,7 @@ public class Player : BaseObject {
 	private void PlayerController() {
 		float xMove = 0f;
 		if (!inJumpBack || grounded) {
-			if (GameUtility.Leq0(weaponAttackMovingPenalty)) {
+			if (MVUtility.Leq0(weaponAttackMovingPenalty)) {
 				xMove = freezeInput? 0 : Input.GetAxis("Horizontal");
 			}
 			else if (freezeInput) xMove = 0;
@@ -268,7 +268,7 @@ public class Player : BaseObject {
 			xMove = knockBackXSpeed * knockBackResistance * knockBackDirection;
 
 		if (Input.GetButtonDown("Jump") && grounded && !freezeInput) {
-			SoundManager.Play("jump1");
+			MVMain.Sound.Play("jump1");
 			//animator.SetTrigger("StartJump");
 			animator.SetBool("StartJumpBool", true);
 			velocity.y = jumpTakeOffSpd + (godMode ? 5f : 0f);
@@ -309,7 +309,7 @@ public class Player : BaseObject {
 	}
 
 	private void PlayerShoot() {
-		if (Input.GetButtonDown("Fire1") && !freezeInput && GameUtility.Geq(weaponPower, ActiveWeapon.WeaponUsage)) {
+		if (Input.GetButtonDown("Fire1") && !freezeInput && MVUtility.Geq(weaponPower, ActiveWeapon.WeaponUsage)) {
 			weaponRechargeDelay = weaponRechargeDelayMax;
 			weaponRechargeDelayStart = false;
 			weaponCanRecharge = false;
@@ -324,7 +324,7 @@ public class Player : BaseObject {
 			animator.SetBool("HoldFire", false);
 		}
 		else if (Input.GetButton("Fire1") && !freezeInput) {
-			if (ActiveWeapon.chargeUse && GameUtility.Geq(weaponPower, ActiveWeapon.WeaponUsage) && ActiveWeapon.fired) {
+			if (ActiveWeapon.chargeUse && MVUtility.Geq(weaponPower, ActiveWeapon.WeaponUsage) && ActiveWeapon.fired) {
 				weaponRechargeDelay = weaponRechargeDelayMax;
 				weaponRechargeDelayStart = false;
 				weaponCanRecharge = false;

@@ -81,21 +81,21 @@ public class BaseEnemy : BaseObject {
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		buffs = new Dictionary<string, BaseEnemyBuff>();
 		if (targetPlayer == null) {
-			targetPlayer = GameScript.main.playerPlayer;
+			targetPlayer = MVMain.Core.playerPlayer;
 		}
 		SetDefault();
 	}
 
 	protected override void POStart() {
-		if (boss && WorldManager.main.GetMarker(RoomManager.main.activeRoomName, GameScript.main.GetLocalChunkPos(rb2d.position)) == defaultName) {
+		if (boss && MVMain.World.GetMarker(MVMain.Room.activeRoomName, MVMain.Core.GetLocalChunkPos(rb2d.position)) == defaultName) {
 			Destroy(gameObject);
 		}
 	}
 
 	protected override void POOnEnable() {
 		if (boss) {
-			GameScript.main.bossBattle = true;
-			GameScript.main.bossEnemy = this;
+			MVMain.Core.bossBattle = true;
+			MVMain.Core.bossEnemy = this;
 		}
 		maxHealth = health;
 
@@ -108,10 +108,10 @@ public class BaseEnemy : BaseObject {
 	}
 
 	protected override void POFixedUpdate() {
-		if (!GameScript.main.dead)
+		if (!MVMain.Core.dead)
 			FixedAI();
-		if (!GameScript.main.dead && !noContactDamage) {
-			int count = rb2d.OverlapCollider(GameScript.main.playerContact, overlapPlayer);
+		if (!MVMain.Core.dead && !noContactDamage) {
+			int count = rb2d.OverlapCollider(MVMain.Core.playerContact, overlapPlayer);
 			if (count > 0) {
 				OnHitPlayer(targetPlayer);
 				Vector2 dir = targetPlayer.GetPosition() - rb2d.position;
@@ -128,7 +128,7 @@ public class BaseEnemy : BaseObject {
 				Destroy(gameObject);
 		}
 
-		if (!GameScript.main.haltGame) {
+		if (!MVMain.Core.haltGame) {
 			#region buff
 			deadBuff = new List<string>();
 			freezeAI = false;
@@ -151,19 +151,19 @@ public class BaseEnemy : BaseObject {
 			#endregion
 		}
 
-		if (targetPlayer == null && GameScript.main.player != null) {
-			targetPlayer = GameScript.main.playerPlayer;
+		if (targetPlayer == null && MVMain.Core.player != null) {
+			targetPlayer = MVMain.Core.playerPlayer;
 		}
 		else if (targetPlayer == null) {
 			Destroy(gameObject);
 		}
 
 		deltaTime = Time.deltaTime;
-		if (!GameScript.main.dead) {
+		if (!MVMain.Core.dead) {
 			Vector2 playerDir = targetPlayer.GetPosition() - rb2d.position;
-			RaycastHit2D groundHit = Physics2D.Raycast(rb2d.position, playerDir.normalized, playerDir.magnitude, GameScript.main.groundLayer);
+			RaycastHit2D groundHit = Physics2D.Raycast(rb2d.position, playerDir.normalized, playerDir.magnitude, MVMain.Core.groundLayer);
 			playerInSight = (groundHit.collider == null);
-			if (!freezeAI && !GameScript.main.haltGame) AI();
+			if (!freezeAI && !MVMain.Core.haltGame) AI();
 		}
 
 		bool flipSprite = (SpriteFlipX ? (velocity.x > 0.01f) : (velocity.x < -0.01f));
@@ -180,13 +180,13 @@ public class BaseEnemy : BaseObject {
 				DefaultGetHit(newDamage);
 		}
 		else {
-			SoundManager.Play("deny1", 1.5f, 1);
+			MVMain.Sound.Play("deny1", 1.5f, 1);
 		}
 	}
 
 	public void GetBuff(string name) {
 		if (!buffs.ContainsKey(name)) {
-			BaseEnemyBuff newBuff = GameUtility.CreateEnemyBuff(name, this);
+			BaseEnemyBuff newBuff = MVUtility.CreateEnemyBuff(name, this);
 			buffs.Add(newBuff.name, newBuff);
 		}
 	}
@@ -231,24 +231,24 @@ public class BaseEnemy : BaseObject {
 
 	private void OnDestroy() {
 		if (health <= 0) {
-			SoundManager.Play(deathSound);
+			MVMain.Sound.Play(deathSound);
 			if (dropHeart) {
 				float chance = Random.Range(0f, 1f);
 				if (chance * 3 <= 1f || boss) {
-					Instantiate<GameObject>(GameScript.main.healthDrop, rb2d.position, Quaternion.identity, GameScript.main.room.transform);
+					Instantiate<GameObject>(MVMain.Core.healthDrop, rb2d.position, Quaternion.identity, MVMain.Core.room.transform);
 				}
 			}
-			GameScript.main.score += score;
+			MVMain.Core.score += score;
 			if (boss) {
-				Vector2Int chunkPos = GameScript.main.GetLocalChunkPos(rb2d.position);
+				Vector2Int chunkPos = MVMain.Core.GetLocalChunkPos(rb2d.position);
 				Color color = GetComponent<SpriteRenderer>().color;
-				WorldManager.main.SetMarker(defaultName, RoomManager.main.activeRoomName, chunkPos, color);
+				MVMain.World.SetMarker(defaultName, MVMain.Room.activeRoomName, chunkPos, color);
 				//UIManager.main.ForceRefreshMinimap();
 			}
 		}
 		if (boss) {
-			GameScript.main.bossBattle = false;
-			GameScript.main.bossEnemy = null;
+			MVMain.Core.bossBattle = false;
+			MVMain.Core.bossEnemy = null;
 		}
 	}
 }

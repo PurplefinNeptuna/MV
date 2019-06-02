@@ -10,7 +10,7 @@ public class BaseEnemyBuff {
 
 	public Tuple<bool, bool> Tick(float deltaTime) {
 		timeleft -= deltaTime;
-		bool alive = (!GameUtility.Leq0(timeleft));
+		bool alive = (!MVUtility.Leq0(timeleft));
 		return new Tuple<bool, bool>(BuffTick(deltaTime), alive);
 	}
 

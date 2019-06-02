@@ -14,15 +14,7 @@ public enum Direction {
 /// <summary>
 /// Contains many helper methods
 /// </summary>
-public static class GameUtility {
-
-	public static Color purple0 = new Color(1, 0, 1, 0);
-	public static Color cyan0 = new Color(0, 1, 1, 0);
-	public static Color blue0 = new Color(0, 0, 1, 0);
-	public static Color cyan6 = new Color(0, 1, 1, .6f);
-	public static Color blue6 = new Color(0, 0, 1, .6f);
-	public static Color green0 = new Color(0, 1, 0, 0);
-
+public static class MVUtility {
 	/// <summary>
 	/// Do complex multiplication
 	/// </summary>

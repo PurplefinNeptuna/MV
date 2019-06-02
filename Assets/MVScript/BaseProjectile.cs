@@ -25,11 +25,11 @@ public class BaseProjectile : MonoBehaviour {
 		set {
 			_friendly = value;
 			if (value) {
-				target = GameScript.main.enemyLayer;
+				target = MVMain.Core.enemyLayer;
 				gameObject.layer = LayerMask.NameToLayer("Projectile");
 			}
 			else {
-				target = GameScript.main.playerCoreLayer;
+				target = MVMain.Core.playerCoreLayer;
 				gameObject.layer = LayerMask.NameToLayer("EnemyProjectile");
 			}
 		}
@@ -93,13 +93,13 @@ public class BaseProjectile : MonoBehaviour {
 	}
 
 	private void Update() {
-		if (GameScript.main.haltGame)
+		if (MVMain.Core.haltGame)
 			return;
 
 		deltaTime = Time.deltaTime;
 		if (!stayAlive) {
 			lifeTime -= Time.deltaTime;
-			if (GameUtility.Leq0(lifeTime))
+			if (MVUtility.Leq0(lifeTime))
 				Destroy(gameObject);
 		}
 		if (_source == null) {
@@ -110,7 +110,7 @@ public class BaseProjectile : MonoBehaviour {
 	}
 
 	private void FixedUpdate() {
-		if (localHalt || localHaltPhysics || GameScript.main.haltGame)
+		if (localHalt || localHaltPhysics || MVMain.Core.haltGame)
 			return;
 
 		float fixedDT = Time.fixedDeltaTime;
@@ -127,11 +127,11 @@ public class BaseProjectile : MonoBehaviour {
 				OnHitEnemy(colliderHitBuffer[i].gameObject);
 			}
 			else {
-				OnHitPlayer(GameScript.main.playerPlayer);
+				OnHitPlayer(MVMain.Core.playerPlayer);
 			}
 		}
 
-		RaycastHit2D ground2 = Physics2D.CircleCast(transform.position, size, velocity.normalized, velocity.magnitude * fixedDT, GameScript.main.groundLayer);
+		RaycastHit2D ground2 = Physics2D.CircleCast(transform.position, size, velocity.normalized, velocity.magnitude * fixedDT, MVMain.Core.groundLayer);
 		if (ground2.collider != null) {
 			groundHitRaycast = ground2;
 			OnHitGround(ground2.normal);

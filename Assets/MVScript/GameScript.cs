@@ -39,7 +39,6 @@ public class Timer {
 }
 
 public class GameScript : MonoBehaviour {
-	public static GameScript main;
 	public Camera GameMainCamera;
 	public Canvas GameUICanvas;
 	public GameScriptData data;
@@ -84,10 +83,10 @@ public class GameScript : MonoBehaviour {
 	private ChunkData[, ] savedMap;
 
 	private void Awake() {
-		if (main == null) {
-			main = this;
+		if (MVMain.Core == null) {
+			MVMain.Core = this;
 		}
-		else if (main != this) {
+		else if (MVMain.Core != this) {
 			Destroy(gameObject);
 		}
 	}
@@ -132,7 +131,7 @@ public class GameScript : MonoBehaviour {
 		if ((bossBattle && !playerTrapped) || (!bossBattle && playerTrapped)) {
 			TrapPlayerInRoom(bossBattle);
 		}
-		finalScore = Mathf.RoundToInt((float) score * DifficultyManager.difficulty);
+		finalScore = Mathf.RoundToInt((float) score * MVMain.Difficulty.difficulty);
 	}
 
 	private void LateUpdate() {
@@ -143,27 +142,27 @@ public class GameScript : MonoBehaviour {
 
 	public void LoadRoom(TeleporterData.TeleporterType transitionMode) {
 		if (!testMode) {
-			room = Instantiate<GameObject>(RoomManager.main.activeRoomData.Room, Vector3.zero, Quaternion.identity);
-			room.name = RoomManager.main.activeRoomData.name;
+			room = Instantiate<GameObject>(MVMain.Room.activeRoomData.Room, Vector3.zero, Quaternion.identity);
+			room.name = MVMain.Room.activeRoomData.name;
 		}
 		else {
 			room = testRoom;
 		}
 
 		grid = room.GetComponentInChildren<Grid>();
-		RoomManager.main.activeRoomData.GetRoomTiles(out tiles, out teleporter);
+		MVMain.Room.activeRoomData.GetRoomTiles(out tiles, out teleporter);
 
 		if (!testMode) {
 			SpawnPlayer(transitionMode);
 		}
 
 		SetCamera();
-		WorldManager.main.RevealChunk(RoomManager.main.activeRoomName, playerLocalChunkPos);
-		MusicManager.Play(RoomManager.main.activeRoomData.BGM_Name);
+		MVMain.World.RevealChunk(MVMain.Room.activeRoomName, playerLocalChunkPos);
+		MVMain.Music.Play(MVMain.Room.activeRoomData.BGM_Name);
 	}
 
 	private void SpawnPlayer(TeleporterData.TeleporterType transitionMode) {
-		WorldTile spawnTile = teleporter.FirstOrDefault(x => x.name == RoomManager.main.spawnFrom);
+		WorldTile spawnTile = teleporter.FirstOrDefault(x => x.name == MVMain.Room.spawnFrom);
 		if (spawnTile == null)
 			return;
 
@@ -258,9 +257,9 @@ public class GameScript : MonoBehaviour {
 			}
 		}
 		else {
-			RoomManager.main.activeRoomName = source.roomTarget;
-			RoomManager.main.spawnFrom = source.teleportTarget;
-			RoomManager.main.LoadRoomData();
+			MVMain.Room.activeRoomName = source.roomTarget;
+			MVMain.Room.spawnFrom = source.teleportTarget;
+			MVMain.Room.LoadRoomData();
 			Destroy(room);
 			LoadRoom(source.transitionMode);
 		}
@@ -295,7 +294,7 @@ public class GameScript : MonoBehaviour {
 	}
 
 	private void TrapPlayerInRoom(bool boss) {
-		MusicManager.Play(boss ? "boss1" : RoomManager.main.activeRoomData.BGM_Name);
+		MVMain.Music.Play(boss ? "boss1" : MVMain.Room.activeRoomData.BGM_Name);
 		Tilemap ground = grid.transform.Find("Ground").GetComponent<Tilemap>();
 		if (boss) {
 			foreach (var tile in teleporter) {
@@ -330,16 +329,16 @@ public class GameScript : MonoBehaviour {
 	private void UpdatePlayerChunk() {
 		Vector2Int oldPlayerChunkPos = new Vector2Int(playerLocalChunkPos.x, playerLocalChunkPos.y);
 		playerLocalChunkPos = GetLocalChunkPos(playerPlayer.GetPosition());
-		playerLocalChunkPos.x = Mathf.Clamp(playerLocalChunkPos.x, 0, RoomManager.main.activeRoomData.chunkSize.x - 1);
-		playerLocalChunkPos.y = Mathf.Clamp(playerLocalChunkPos.y, 0, RoomManager.main.activeRoomData.chunkSize.y - 1);
+		playerLocalChunkPos.x = Mathf.Clamp(playerLocalChunkPos.x, 0, MVMain.Room.activeRoomData.chunkSize.x - 1);
+		playerLocalChunkPos.y = Mathf.Clamp(playerLocalChunkPos.y, 0, MVMain.Room.activeRoomData.chunkSize.y - 1);
 		if (oldPlayerChunkPos != playerLocalChunkPos) {
-			WorldManager.main.RevealChunk(RoomManager.main.activeRoomName, playerLocalChunkPos);
+			MVMain.World.RevealChunk(MVMain.Room.activeRoomName, playerLocalChunkPos);
 		}
 	}
 
 	public Vector2Int GetLocalChunkPos(Vector3 pos) {
 		Vector3Int gridPos = grid.WorldToCell(pos);
-		return RoomManager.main.GetLocalChunkPos(gridPos);
+		return MVMain.Room.GetLocalChunkPos(gridPos);
 	}
 
 	private void OnDestroy() {
@@ -351,19 +350,19 @@ public class GameScript : MonoBehaviour {
 	}
 
 	public void SaveMinimapData() {
-		savedMap = new ChunkData[WorldManager.main.mapSize.x, WorldManager.main.mapSize.y];
-		for (int i = 0; i < WorldManager.main.mapSize.x; i++) {
-			for (int j = 0; j < WorldManager.main.mapSize.y; j++) {
-				savedMap[i, j] = new ChunkData(WorldManager.main.map[i, j]);
+		savedMap = new ChunkData[MVMain.World.mapSize.x, MVMain.World.mapSize.y];
+		for (int i = 0; i < MVMain.World.mapSize.x; i++) {
+			for (int j = 0; j < MVMain.World.mapSize.y; j++) {
+				savedMap[i, j] = new ChunkData(MVMain.World.map[i, j]);
 			}
 		}
 	}
 
 	private void LoadMinimapData() {
-		WorldManager.main.map = new ChunkData[WorldManager.main.mapSize.x, WorldManager.main.mapSize.y];
-		for (int i = 0; i < WorldManager.main.mapSize.x; i++) {
-			for (int j = 0; j < WorldManager.main.mapSize.y; j++) {
-				WorldManager.main.map[i, j] = savedMap[i, j];
+		MVMain.World.map = new ChunkData[MVMain.World.mapSize.x, MVMain.World.mapSize.y];
+		for (int i = 0; i < MVMain.World.mapSize.x; i++) {
+			for (int j = 0; j < MVMain.World.mapSize.y; j++) {
+				MVMain.World.map[i, j] = savedMap[i, j];
 			}
 		}
 	}
@@ -371,10 +370,10 @@ public class GameScript : MonoBehaviour {
 	public void SaveAllData(string spawner = "") {
 
 		if (spawner == "") {
-			spawner = RoomManager.main.spawnFrom;
+			spawner = MVMain.Room.spawnFrom;
 		}
 
-		lastRoom = RoomManager.main.activeRoomName;
+		lastRoom = MVMain.Room.activeRoomName;
 		lastSpawn = spawner;
 		lastMaxHealth = playerPlayer.maxHealth;
 
@@ -426,7 +425,7 @@ public class GameScript : MonoBehaviour {
 			return false;
 		}
 
-		Vector2Int mapSize = WorldManager.main.mapSize;
+		Vector2Int mapSize = MVMain.World.mapSize;
 		savedMap = new ChunkData[mapSize.x, mapSize.y];
 		for (int i = 0; i < mapSize.x; i++) {
 			for (int j = 0; j < mapSize.y; j++) {
@@ -441,14 +440,14 @@ public class GameScript : MonoBehaviour {
 		lastSpawn = data.lastSpawn;
 		lastMaxHealth = data.lastMaxHealth;
 
-		playerPlayer.weapons = data.weapons.Select(x => GameUtility.CreateWeapon(x.name, x.level)).ToList();
+		playerPlayer.weapons = data.weapons.Select(x => MVUtility.CreateWeapon(x.name, x.level)).ToList();
 
 		playerPlayer.maxHealth = lastMaxHealth;
 		playerPlayer.health = lastMaxHealth;
 
-		RoomManager.main.activeRoomName = lastRoom;
-		RoomManager.main.spawnFrom = lastSpawn;
-		RoomManager.main.LoadRoomData();
+		MVMain.Room.activeRoomName = lastRoom;
+		MVMain.Room.spawnFrom = lastSpawn;
+		MVMain.Room.LoadRoomData();
 		if (room != null)
 			Destroy(room);
 		LoadRoom(TeleporterData.TeleporterType.Direct);

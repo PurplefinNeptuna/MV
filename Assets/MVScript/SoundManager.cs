@@ -7,19 +7,14 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour {
 
 	#region Static
-	public static SoundManager main;
 
 	private void Awake() {
-		if (main == null) {
-			main = this;
+		if (MVMain.Sound == null) {
+			MVMain.Sound = this;
 		}
-		else if (main != this) {
+		else if (MVMain.Sound != this) {
 			Destroy(gameObject);
 		}
-	}
-
-	public static void Play(string soundName, float pitch = 1f, int audioSourceID = 0) {
-		main?.PlaySound(soundName, pitch, audioSourceID);
 	}
 	#endregion
 
@@ -40,7 +35,7 @@ public class SoundManager : MonoBehaviour {
 		}
 	}
 
-	private void PlaySound(string soundName, float pitch, int audioID) {
+	public void Play(string soundName, float pitch = 1f, int audioID = 0) {
 		bool soundExist = sounds.Any(x => x.name == soundName);
 		if (!soundList.Contains(soundName) && soundExist) {
 			soundList.Add(soundName);

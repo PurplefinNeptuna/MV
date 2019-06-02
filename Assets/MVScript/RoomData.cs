@@ -92,7 +92,7 @@ public class RoomData : ScriptableObject {
 						continue;
 
 					string tileName = map.GetTile(pos).name;
-					Vector2Int tileChunkPos = GameUtility.TilePosToLocalChunkPos(pos.x, pos.y, chunkTopLeft, new Vector2Int(24, 16));
+					Vector2Int tileChunkPos = MVUtility.TilePosToLocalChunkPos(pos.x, pos.y, chunkTopLeft, new Vector2Int(24, 16));
 
 					if (tileName[0] == 'O' && tileName.Length == 2 && char.IsDigit(tileName[1])) {
 						//Receiver

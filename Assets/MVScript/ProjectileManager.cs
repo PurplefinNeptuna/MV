@@ -7,7 +7,7 @@ public class ProjectileManager {
 
 	public static int projectileCount = 0;
 
-	public static GameObject Spawn(Vector2 worldPos, float speed, Vector2 direction, bool friendly, GameObject source, int damage = 5, string projectileName = "Bullet", string behaviourName = "DefaultBullet", Color? color = null, string sound = null) {
+	public GameObject Spawn(Vector2 worldPos, float speed, Vector2 direction, bool friendly, GameObject source, int damage = 5, string projectileName = "Bullet", string behaviourName = "DefaultBullet", Color? color = null, string sound = null) {
 		Type type;
 		Color targetColor;
 		GameObject prefab = Resources.Load<GameObject>("Prefabs/Projectiles/" + projectileName);
@@ -23,7 +23,7 @@ public class ProjectileManager {
 			if (friendly)
 				targetColor = Color.white;
 			else
-				targetColor = GameUtility.blue0;
+				targetColor = Color.red;
 		}
 		else {
 			targetColor = (Color) color;
@@ -31,10 +31,10 @@ public class ProjectileManager {
 
 		direction.Normalize();
 		projectileCount++;
-		GameObject result = GameObject.Instantiate<GameObject>(prefab, worldPos, Quaternion.identity, GameScript.main.room.transform);
+		GameObject result = GameObject.Instantiate<GameObject>(prefab, worldPos, Quaternion.identity, MVMain.Core.room.transform);
 		result.GetComponent<SpriteRenderer>().color = targetColor;
 		result.AddComponent(type);
-		result.transform.rotation = GameUtility.TopDownRotationFromDirection(direction);
+		result.transform.rotation = MVUtility.TopDownRotationFromDirection(direction);
 		BaseProjectile projectile = result.GetComponent(type) as BaseProjectile;
 		projectile.Source = source;
 		projectile.Friendly = friendly;
@@ -45,7 +45,7 @@ public class ProjectileManager {
 		projectile.damage = damage;
 
 		if (sound != null)
-			SoundManager.Play(sound);
+			MVMain.Sound.Play(sound);
 
 		return result;
 	}
