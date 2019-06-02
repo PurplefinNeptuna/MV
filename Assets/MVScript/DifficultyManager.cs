@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DifficultyManager{
+namespace MV {
+	public class DifficultyManager {
 
-	public float difficulty = 1f;
+		public float difficulty = 1f;
+	}
 }
