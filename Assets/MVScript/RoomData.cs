@@ -6,6 +6,9 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 namespace MV {
+	/// <summary>
+	/// Data for teleporter
+	/// </summary>
 	[Serializable]
 	public class TeleporterData {
 		public enum TeleporterType {
@@ -22,6 +25,9 @@ namespace MV {
 		public Direction teleporterDirection;
 	}
 
+	/// <summary>
+	/// Data for teleporter receiver
+	/// </summary>
 	[Serializable]
 	public class ReceiverData {
 		public string name;
@@ -29,6 +35,9 @@ namespace MV {
 	}
 
 	//[CreateAssetMenu(fileName = "NewRoom", menuName = "MVFramework/Create New Room Data")]
+	/// <summary>
+	/// Data for each room
+	/// </summary>
 	public class RoomData : ScriptableObject {
 		[Header("Generated Data")]
 		public GameObject Room;
@@ -41,6 +50,11 @@ namespace MV {
 		[Header("Generated Data")]
 		public List<ReceiverData> receivers;
 
+		/// <summary>
+		/// Get room tiles and teleporters
+		/// </summary>
+		/// <param name="tiles">tile Dictionary</param>
+		/// <param name="teleporter">teleporter List</param>
 		public void GetRoomTiles(out Dictionary<Vector3Int, WorldTile> tiles, out List<WorldTile> teleporter) {
 			tiles = new Dictionary<Vector3Int, WorldTile>();
 			teleporter = new List<WorldTile>();
@@ -81,6 +95,9 @@ namespace MV {
 			}
 		}
 
+		/// <summary>
+		/// Recalculate RoomData
+		/// </summary>
 		public void RecalculateData() {
 			receivers = new List<ReceiverData>();
 			Grid grid = Room.GetComponentInChildren<Grid>();

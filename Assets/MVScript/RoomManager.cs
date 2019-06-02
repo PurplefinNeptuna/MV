@@ -5,6 +5,9 @@ using System.Linq;
 using UnityEngine;
 
 namespace MV {
+	/// <summary>
+	/// Class for managing active and available rooms
+	/// </summary>
 	public class RoomManager : MonoBehaviour {
 		//public static RoomManager main;
 		public Dictionary<string, RoomData> rooms;
@@ -41,6 +44,9 @@ namespace MV {
 			}
 		}
 
+		/// <summary>
+		/// Load the activeRoom data
+		/// </summary>
 		public void LoadRoomData() {
 			if (rooms.ContainsKey(activeRoomName))
 				activeRoomData = rooms[activeRoomName];
@@ -48,6 +54,11 @@ namespace MV {
 				activeRoomData = rooms.First().Value;
 		}
 
+		/// <summary>
+		/// Get local chunk position based from tile position
+		/// </summary>
+		/// <param name="pos">tile position</param>
+		/// <returns>position of chunk in room</returns>
 		public Vector2Int GetLocalChunkPos(Vector3Int pos) {
 			return MVUtility.TilePosToLocalChunkPos(pos.x, pos.y, activeRoomData.chunkTopLeft, new Vector2Int(24, 16));
 		}

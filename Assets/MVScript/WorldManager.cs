@@ -5,6 +5,9 @@ using System.Linq;
 using UnityEngine;
 
 namespace MV {
+	/// <summary>
+	/// Class for each world chunk data
+	/// </summary>
 	[Serializable]
 	public class ChunkData {
 		public string roomName = "";
@@ -20,6 +23,10 @@ namespace MV {
 
 		public ChunkData() {}
 
+		/// <summary>
+		/// Deep Clone of chunkData
+		/// </summary>
+		/// <param name="node">the origin data</param>
 		public ChunkData(ChunkData node) {
 			this.roomName = node.roomName;
 			this.marker = node.marker;
@@ -89,6 +96,10 @@ namespace MV {
 			}
 		}
 
+		/// <summary>
+		/// Open new big(continuous) path
+		/// </summary>
+		/// <param name="dir">direction</param>
 		public void SetBig(Direction dir) {
 			int d = 0;
 			switch (dir) {
@@ -108,6 +119,10 @@ namespace MV {
 			big[d] = true;
 		}
 
+		/// <summary>
+		/// Open new small(room connector) path
+		/// </summary>
+		/// <param name="dir">direction</param>
 		public void SetSmall(Direction dir) {
 			int d = 0;
 			switch (dir) {
@@ -128,6 +143,9 @@ namespace MV {
 		}
 	}
 
+	/// <summary>
+	/// Class for all world data
+	/// </summary>
 	public class WorldManager : MonoBehaviour {
 		//public static WorldManager main;
 
@@ -147,6 +165,9 @@ namespace MV {
 			}
 		}
 
+		/// <summary>
+		/// Scan all rooms and create new world data
+		/// </summary>
 		private void Scan() {
 			foreach (var room in MVMain.Room.rooms) {
 				string debugString = room.Key + " : ";
@@ -234,6 +255,12 @@ namespace MV {
 			}
 		}
 
+		/// <summary>
+		/// Get the cutout world data
+		/// </summary>
+		/// <param name="result">result 2D array</param>
+		/// <param name="startpos">topLeft position</param>
+		/// <param name="size">size of array</param>
 		public void GetMinimapData(out ChunkData[, ] result, Vector2Int startpos, Vector2Int size) {
 			result = new ChunkData[size.x, size.y];
 			for (int i = 0; i < size.x; i++) {
@@ -244,11 +271,23 @@ namespace MV {
 			}
 		}
 
+		/// <summary>
+		/// Reveal the chunk
+		/// </summary>
+		/// <param name="room">room name</param>
+		/// <param name="pos">local chunk position</param>
 		public void RevealChunk(string room, Vector2Int pos) {
 			Vector2Int realPos = roomPos[room] + pos;
 			map[realPos.x, realPos.y].explored = true;
 		}
 
+		/// <summary>
+		/// Set marker data for chunk
+		/// </summary>
+		/// <param name="marker">marker name in MarkerData</param>
+		/// <param name="room">room name</param>
+		/// <param name="pos">local chunk position</param>
+		/// <param name="color">marker color</param>
 		public void SetMarker(string marker, string room, Vector2Int pos, Color? color = null) {
 			Vector2Int realPos = roomPos[room] + pos;
 			map[realPos.x, realPos.y].marker = marker;
@@ -260,6 +299,12 @@ namespace MV {
 			}
 		}
 
+		/// <summary>
+		/// Get marker in chunk
+		/// </summary>
+		/// <param name="room">room name</param>
+		/// <param name="pos">local chunk position</param>
+		/// <returns>marker name</returns>
 		public string GetMarker(string room, Vector2Int pos) {
 			Vector2Int realPos = roomPos[room] + pos;
 			return map[realPos.x, realPos.y].marker;

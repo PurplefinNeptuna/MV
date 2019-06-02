@@ -5,6 +5,9 @@ using TMPro;
 using UnityEngine;
 
 namespace MV {
+	/// <summary>
+	/// Direction
+	/// </summary>
 	public enum Direction {
 		Up,
 		Right,
@@ -177,6 +180,12 @@ namespace MV {
 			return Quaternion.LookRotation(Vector3.forward, dir);
 		}
 
+		/// <summary>
+		/// Create new buff for enemy
+		/// </summary>
+		/// <param name="name">name of buff class</param>
+		/// <param name="host">the host</param>
+		/// <returns>created buff</returns>
 		public static BaseEnemyBuff CreateEnemyBuff(string name, BaseEnemy host) {
 			Type t = Type.GetType(name, false);
 			if (t == null)
@@ -187,6 +196,12 @@ namespace MV {
 			return newEnemyBuff;
 		}
 
+		/// <summary>
+		/// Create new buff for player
+		/// </summary>
+		/// <param name="name">name of buff class</param>
+		/// <param name="host">the host</param>
+		/// <returns>created buff</returns>
 		public static BasePlayerBuff CreatePlayerBuff(string name, Player host) {
 			Type t = Type.GetType(name, false);
 			if (t == null)

@@ -26,8 +26,6 @@ namespace MV {
 		[HideInInspector]
 		public bool noFlip = false;
 		[HideInInspector]
-		public bool dropHeart;
-		[HideInInspector]
 		public bool noContactDamage;
 		[HideInInspector]
 		public int score;
@@ -173,6 +171,11 @@ namespace MV {
 				transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
 		}
 
+		/// <summary>
+		/// Method for giving Enemy damage from Player
+		/// </summary>
+		/// <param name="damage">damage</param>
+		/// <param name="source">source player</param>
 		public void GetHit(int damage, Player source) {
 			if (!immortal || source.godMode) {
 				int newDamage = Mathf.RoundToInt(Random.Range(.8f, 1.2f) * (float) damage);
@@ -186,6 +189,10 @@ namespace MV {
 			}
 		}
 
+		/// <summary>
+		/// Method for giving enemy buff
+		/// </summary>
+		/// <param name="name">name of buff</param>
 		public void GetBuff(string name) {
 			if (!buffs.ContainsKey(name)) {
 				BaseEnemyBuff newBuff = MVUtility.CreateEnemyBuff(name, this);
@@ -234,12 +241,6 @@ namespace MV {
 		private void OnDestroy() {
 			if (health <= 0) {
 				MVMain.Sound.Play(deathSound);
-				if (dropHeart) {
-					float chance = Random.Range(0f, 1f);
-					if (chance * 3 <= 1f || boss) {
-						Instantiate<GameObject>(MVMain.Core.healthDrop, rb2d.position, Quaternion.identity, MVMain.Core.room.transform);
-					}
-				}
 				MVMain.Core.score += score;
 				if (boss) {
 					Vector2Int chunkPos = MVMain.Core.GetLocalChunkPos(rb2d.position);

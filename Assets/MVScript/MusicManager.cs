@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace MV {
+	/// <summary>
+	/// Class for playing background music
+	/// </summary>
 	public class MusicManager : MonoBehaviour {
 
 		#region static
@@ -23,6 +26,10 @@ namespace MV {
 			audioSource = GetComponent<AudioSource>();
 		}
 
+		/// <summary>
+		/// Play the music
+		/// </summary>
+		/// <param name="musicName">Name in MusicData</param>
 		public void Play(string musicName) {
 			if (musicName != audioSource.clip?.name) {
 				MusicData music = Resources.Load<MusicData>("MusicData/" + musicName);

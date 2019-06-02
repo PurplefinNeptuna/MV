@@ -7,6 +7,9 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 namespace MV {
+	/// <summary>
+	/// Class for tile data
+	/// </summary>
 	[Serializable]
 	public class WorldTile {
 		public Vector3Int localPlace;

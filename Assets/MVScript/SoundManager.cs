@@ -5,6 +5,9 @@ using System.Linq;
 using UnityEngine;
 
 namespace MV {
+	/// <summary>
+	/// Class for playing sounds
+	/// </summary>
 	public class SoundManager : MonoBehaviour {
 
 		#region Static
@@ -36,6 +39,12 @@ namespace MV {
 			}
 		}
 
+		/// <summary>
+		/// Play new sound
+		/// </summary>
+		/// <param name="soundName">name of sound file</param>
+		/// <param name="pitch">pitch</param>
+		/// <param name="audioID">channel (currently only 2 channel exist)</param>
 		public void Play(string soundName, float pitch = 1f, int audioID = 0) {
 			bool soundExist = sounds.Any(x => x.name == soundName);
 			if (!soundList.Contains(soundName) && soundExist) {

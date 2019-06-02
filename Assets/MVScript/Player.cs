@@ -4,6 +4,9 @@ using System.Linq;
 using UnityEngine;
 
 namespace MV {
+	/// <summary>
+	/// Class for player
+	/// </summary>
 	public class Player : BaseObject {
 
 		private float deltaTime;
@@ -185,12 +188,26 @@ namespace MV {
 			velocity += VelocityFromEffects;
 		}
 
+		/// <summary>
+		/// Method for giving player knockback effects
+		/// </summary>
+		/// <param name="direction">Vector2 of forces</param>
+		/// <param name="attackMultiplier">power of knockback</param>
 		public void Knockback(Vector2 direction, float attackMultiplier = 1f) {
 			knockBackDirection = Mathf.Sign(direction.x);
 			jumpBack = true;
 			velocity.y = knockBackYSpeed * knockBackResistance * attackMultiplier;
 		}
 
+		/// <summary>
+		/// Method for giving player damage
+		/// </summary>
+		/// <param name="direction">direction of attack</param>
+		/// <param name="damage">damage</param>
+		/// <param name="ignoreInvincible">is the attack ignoring the invincible status?</param>
+		/// <param name="knockbackMultiplier">knockback power</param>
+		/// <param name="playSound">should it playing hurt sound?</param>
+		/// <param name="drawNumber">should it draw damage number?(currently unused)</param>
 		public void GetHit(Vector2 direction, int damage, bool ignoreInvincible = false, float knockbackMultiplier = 1f, bool playSound = true, bool drawNumber = false) {
 			if (godMode)
 				return;
@@ -222,11 +239,19 @@ namespace MV {
 			}
 		}
 
+		/// <summary>
+		/// Method for healing player
+		/// </summary>
+		/// <param name="amount">amount of heal</param>
 		public void GetHeal(int amount) {
 			health = Mathf.Min(health + amount, maxHealth);
 			//GameUtility.SpawnPopupText(amount.ToString(), rb2d.position + Random.insideUnitCircle * 0.25f, Color.green);
 		}
 
+		/// <summary>
+		/// Method for giving player buff
+		/// </summary>
+		/// <param name="name">name of buff</param>
 		public void GetBuff(string name) {
 			if (!buffs.ContainsKey(name)) {
 				BasePlayerBuff newBuff = MVUtility.CreatePlayerBuff(name, this);
@@ -234,6 +259,9 @@ namespace MV {
 			}
 		}
 
+		/// <summary>
+		/// Method for removing player after dead, and forcing game over
+		/// </summary>
 		public void Dead() {
 			MVMain.Core.GameOver();
 			Destroy(gameObject);
@@ -249,14 +277,25 @@ namespace MV {
 			}
 		}
 
+		/// <summary>
+		/// Set position of player
+		/// </summary>
+		/// <param name="pos">position in 3D space</param>
 		public void SetPosition(Vector3 pos) {
 			rb2d.position = pos;
 		}
 
+		/// <summary>
+		/// Get player position
+		/// </summary>
+		/// <returns>position in 2D space</returns>
 		public Vector2 GetPosition() {
 			return rb2d.position;
 		}
 
+		/// <summary>
+		/// Control of player
+		/// </summary>
 		private void PlayerController() {
 			float xMove = 0f;
 			if (!inJumpBack || grounded) {
@@ -309,6 +348,9 @@ namespace MV {
 			animator.SetBool("Grounded", grounded);
 		}
 
+		/// <summary>
+		/// Control player weapon using behaviour
+		/// </summary>
 		private void PlayerShoot() {
 			if (Input.GetButtonDown("Fire1") && !freezeInput && MVUtility.Geq(weaponPower, ActiveWeapon.WeaponUsage)) {
 				weaponRechargeDelay = weaponRechargeDelayMax;
@@ -338,6 +380,10 @@ namespace MV {
 			}
 		}
 
+		/// <summary>
+		/// Check if player has the given weapon
+		/// </summary>
+		/// <param name="name">name of the weapon</param>
 		public bool HasWeapon(string name) {
 			if (weapons.Count == 0)
 				return false;
@@ -348,6 +394,11 @@ namespace MV {
 			return false;
 		}
 
+		/// <summary>
+		/// Get player's weapon data
+		/// </summary>
+		/// <param name="name">name of weapon</param>
+		/// <returns>weapon data</returns>
 		public BaseWeapon GetWeapon(string name) {
 			if (!HasWeapon(name))
 				return null;
@@ -355,18 +406,28 @@ namespace MV {
 			return weapons.FirstOrDefault(x => x.name == name);
 		}
 
+		/// <summary>
+		/// Get currently active weapon's level
+		/// </summary>
 		public int GetWeaponLevel() {
 			if (weapons.Count == 0)
 				return -1;
 			return ActiveWeapon.level;
 		}
 
+		/// <summary>
+		/// Get the level of given weapon
+		/// </summary>
+		/// <param name="name">weapon name</param>
 		public int GetWeaponLevel(string name) {
 			if (!HasWeapon(name))
 				return -1;
 			return GetWeapon(name).level;
 		}
 
+		/// <summary>
+		/// Set color of player
+		/// </summary>
 		public void SetColor(Color color) {
 			spriteRenderer.color = color;
 			defaultColor = color;

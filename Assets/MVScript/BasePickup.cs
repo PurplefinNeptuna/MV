@@ -79,6 +79,10 @@ namespace MV {
 		/// </summary>
 		public virtual void SetDefault() {}
 
+		/// <summary>
+		/// Update pickup per tick
+		/// </summary>
+		/// <param name="deltaTime">Time elapsed since last tick</param>
 		public virtual void PickupUpdate(float deltaTime) {}
 	}
 }

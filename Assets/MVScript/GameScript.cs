@@ -11,6 +11,9 @@ using UnityEngine.U2D;
 using UnityEngine.UI;
 
 namespace MV {
+	/// <summary>
+	/// Data for saving
+	/// </summary>
 	[Serializable]
 	public class GameScriptData {
 		public int score;
@@ -39,6 +42,9 @@ namespace MV {
 		public float totalPlayTime = 0;
 	}
 
+	/// <summary>
+	/// Core for MV functionality
+	/// </summary>
 	public class GameScript : MonoBehaviour {
 		public Camera GameMainCamera;
 		public Canvas GameUICanvas;
@@ -166,6 +172,10 @@ namespace MV {
 			}
 		}
 
+		/// <summary>
+		/// Load room referenced by MVMain.Room.activeroomData
+		/// </summary>
+		/// <param name="transitionMode">transition movement</param>
 		public void LoadRoom(TeleporterData.TeleporterType transitionMode) {
 			if (!testMode) {
 				room = Instantiate<GameObject>(MVMain.Room.activeRoomData.Room, Vector3.zero, Quaternion.identity);
@@ -187,6 +197,10 @@ namespace MV {
 			MVMain.Music.Play(MVMain.Room.activeRoomData.BGM_Name);
 		}
 
+		/// <summary>
+		/// Teleport player to referenced teleporter position in MVMain.Room.spawnFrom
+		/// </summary>
+		/// <param name="transitionMode">transition movement</param>
 		private void SpawnPlayer(TeleporterData.TeleporterType transitionMode) {
 			WorldTile spawnTile = teleporter.FirstOrDefault(x => x.name == MVMain.Room.spawnFrom);
 			if (spawnTile == null)
@@ -210,6 +224,9 @@ namespace MV {
 			UpdatePlayerChunk();
 		}
 
+		/// <summary>
+		/// Set Cinemachine camera settings
+		/// </summary>
 		private void SetCamera() {
 			CinemachineVirtualCamera playerVC = VCamPlayer.GetComponent<CinemachineVirtualCamera>();
 			CinemachineVirtualCamera bossVC = VBossBattle.GetComponent<CinemachineVirtualCamera>();
@@ -246,12 +263,18 @@ namespace MV {
 			}
 		}
 
+		/// <summary>
+		/// Method for forcing dead
+		/// </summary>
 		public void GameOver() {
 			SaveTimer();
 			gameOverPanel.SetActive(true);
 			dead = true;
 		}
 
+		/// <summary>
+		/// Method for respawn and reload last save
+		/// </summary>
 		private void Retry() {
 			gameOverPanel.SetActive(false);
 			player = Instantiate<GameObject>(playerPrefab, Vector3.zero, Quaternion.identity);
@@ -265,6 +288,9 @@ namespace MV {
 			dead = false;
 		}
 
+		/// <summary>
+		/// Method called when winning the game
+		/// </summary>
 		public void Win() {
 			scoreText.text = "score: " + finalScore;
 			winPanel.SetActive(true);
@@ -272,6 +298,10 @@ namespace MV {
 			win = true;
 		}
 
+		/// <summary>
+		/// Called when player come into teleporter tiles
+		/// </summary>
+		/// <param name="source"></param>
 		public void Teleport(WorldTile source) {
 			if (testMode || source.roomTarget == "" || source.roomTarget == null)
 				return;
@@ -291,6 +321,10 @@ namespace MV {
 			}
 		}
 
+		/// <summary>
+		/// Smooth camera transition when encounter/defeating bosses
+		/// </summary>
+		/// <param name="boss">is the boss exist?</param>
 		private IEnumerator SwitchCamera(bool boss) {
 			yield return new WaitForSeconds(1f);
 			int ppuScale = boss ? 40 : 64;
@@ -314,11 +348,21 @@ namespace MV {
 			CPP.enabled = true;
 		}
 
+		/// <summary>
+		/// Set Cinemachine Look Ahead level for cameras
+		/// </summary>
+		/// <param name="camFT">Cinemachine's camera frame</param>
+		/// <param name="time">Level of look ahead in second</param>
+		/// <returns></returns>
 		private IEnumerator SetLookAhead(CinemachineFramingTransposer camFT, float time) {
 			yield return new WaitForSeconds(.2f);
 			camFT.m_LookaheadTime = time;
 		}
 
+		/// <summary>
+		/// Trap/Release player in room when boss exist/not-exist
+		/// </summary>
+		/// <param name="boss">is the boss exist?</param>
 		private void TrapPlayerInRoom(bool boss) {
 			MVMain.Music.Play(boss ? "boss1" : MVMain.Room.activeRoomData.BGM_Name);
 			Tilemap ground = grid.transform.Find("Ground").GetComponent<Tilemap>();
@@ -352,6 +396,9 @@ namespace MV {
 			playerTrapped = boss;
 		}
 
+		/// <summary>
+		/// Update and reveal chunk the player reside
+		/// </summary>
 		private void UpdatePlayerChunk() {
 			Vector2Int oldPlayerChunkPos = new Vector2Int(playerLocalChunkPos.x, playerLocalChunkPos.y);
 			playerLocalChunkPos = GetLocalChunkPos(playerPlayer.GetPosition());
@@ -362,6 +409,11 @@ namespace MV {
 			}
 		}
 
+		/// <summary>
+		/// get chunk position in room from 3D position
+		/// </summary>
+		/// <param name="pos">position</param>
+		/// <returns>chunk position in room</returns>
 		public Vector2Int GetLocalChunkPos(Vector3 pos) {
 			Vector3Int gridPos = grid.WorldToCell(pos);
 			return MVMain.Room.GetLocalChunkPos(gridPos);
@@ -375,6 +427,9 @@ namespace MV {
 			SaveTimer();
 		}
 
+		/// <summary>
+		/// Copy minimap(world) data for saving
+		/// </summary>
 		public void SaveMinimapData() {
 			savedMap = new ChunkData[MVMain.World.mapSize.x, MVMain.World.mapSize.y];
 			for (int i = 0; i < MVMain.World.mapSize.x; i++) {
@@ -384,6 +439,9 @@ namespace MV {
 			}
 		}
 
+		/// <summary>
+		/// Load minimap(world) data
+		/// </summary>
 		private void LoadMinimapData() {
 			MVMain.World.map = new ChunkData[MVMain.World.mapSize.x, MVMain.World.mapSize.y];
 			for (int i = 0; i < MVMain.World.mapSize.x; i++) {
@@ -393,6 +451,10 @@ namespace MV {
 			}
 		}
 
+		/// <summary>
+		/// Save data to persistentPath
+		/// </summary>
+		/// <param name="spawner">last spawner(checkpoint) position</param>
 		public void SaveAllData(string spawner = "") {
 
 			if (spawner == "") {
@@ -431,6 +493,10 @@ namespace MV {
 			}
 		}
 
+		/// <summary>
+		/// load data from persistentPath
+		/// </summary>
+		/// <returns>true if save file exist</returns>
 		private bool LoadAllData() {
 			data = new GameScriptData();
 			bool loadExist = false;
@@ -480,6 +546,9 @@ namespace MV {
 			return true;
 		}
 
+		/// <summary>
+		/// save the timer to persistentPath
+		/// </summary>
 		private void SaveTimer() {
 			if (Time.time == 0)
 				return;
@@ -496,6 +565,10 @@ namespace MV {
 			}
 		}
 
+		/// <summary>
+		/// load timer from persistentPath
+		/// </summary>
+		/// <returns>true if save file exist</returns>
 		private bool LoadTimer() {
 			bool loadExist = false;
 			Timer loadedTime = new Timer();
