@@ -17,7 +17,16 @@ namespace MV {
 		public static EnemyManager Enemy;
 		public static DifficultyManager Difficulty;
 
+		private static MVMain _main_;
+
 		private void Awake() {
+			if (_main_ == null) {
+				_main_ = this;
+			}
+			else if (_main_ != this) {
+				Destroy(gameObject);
+			}
+
 			Enemy = new EnemyManager();
 			Difficulty = new DifficultyManager();
 			Projectile = new ProjectileManager();
