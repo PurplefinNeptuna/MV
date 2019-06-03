@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace MV {
+	/// <summary>
+	/// Buff class for Player
+	/// </summary>
 	public class BasePlayerBuff {
 		public Player host;
 		public float timeleft;

@@ -70,12 +70,12 @@ namespace MV {
 
 		public Vector2 VelocityFromEffects;
 
-		public Animator animator;
+		// public Animator animator;
 
 		private void Awake() {
 			health = maxHealth;
 			spriteRenderer = GetComponent<SpriteRenderer>();
-			animator = GetComponent<Animator>();
+			// animator = GetComponent<Animator>();
 			weapons = new List<BaseWeapon>();
 			buffs = new Dictionary<string, BasePlayerBuff>();
 			weaponAttackMovingPenalty = 0f;
@@ -83,11 +83,11 @@ namespace MV {
 
 		private void Update() {
 			if (MVMain.Core.haltGame) {
-				animator.speed = 0;
+				// animator.speed = 0;
 				return;
 			}
 			else {
-				animator.speed = 1;
+				// animator.speed = 1;
 			}
 
 			VelocityFromEffects = Vector2.zero;
@@ -309,18 +309,17 @@ namespace MV {
 
 			if (Input.GetButtonDown("Jump") && grounded && !freezeInput) {
 				MVMain.Sound.Play("jump1");
-				//animator.SetTrigger("StartJump");
-				animator.SetBool("StartJumpBool", true);
+				// animator.SetBool("StartJumpBool", true);
 				velocity.y = jumpTakeOffSpd + (godMode ? 5f : 0f);
 			}
 			else if (Input.GetButtonUp("Jump") || freezeInput) {
-				animator.SetBool("StartJumpBool", false);
+				// animator.SetBool("StartJumpBool", false);
 				if (velocity.y > 0) {
 					velocity.y *= .5f;
 				}
 			}
 			else if (Input.GetButton("Jump")) {
-				animator.SetBool("StartJumpBool", false);
+				// animator.SetBool("StartJumpBool", false);
 			}
 
 			if (weapons.Count > 0 && !ActiveWeapon.fired && !freezeInput) {
@@ -334,18 +333,16 @@ namespace MV {
 					if (activeWeaponIndex < 0)
 						activeWeaponIndex += weapons.Count;
 				}
-				//animator.SetInteger("AttackID", ActiveWeapon.attackType);
 			}
 
 			velocity.x = xMove * (maxSpeed + (godMode ? 5f : 0f));
 			bool flipSprite = (SpriteFlipX ? (xMove > 0.01f) : (xMove < -0.01f));
 			if (flipSprite && !inJumpBack)
-				//spriteRenderer.flipX = !spriteRenderer.flipX;
 				transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
 
-			animator.SetFloat("Speed", Mathf.Abs(velocity.x));
-			animator.SetFloat("VelY", velocity.y);
-			animator.SetBool("Grounded", grounded);
+			// animator.SetFloat("Speed", Mathf.Abs(velocity.x));
+			// animator.SetFloat("VelY", velocity.y);
+			// animator.SetBool("Grounded", grounded);
 		}
 
 		/// <summary>
@@ -358,13 +355,13 @@ namespace MV {
 				weaponCanRecharge = false;
 				ActiveWeapon.StartUse();
 				weaponAttackMovingPenalty = weaponAttackMovingPenaltyMax;
-				animator.SetTrigger("Attack");
-				animator.SetBool("HoldFire", true);
+				// animator.SetTrigger("Attack");
+				// animator.SetBool("HoldFire", true);
 			}
 			else if (Input.GetButtonUp("Fire1") || freezeInput) {
 				weaponRechargeDelayStart = true;
 				ActiveWeapon.EndUse();
-				animator.SetBool("HoldFire", false);
+				// animator.SetBool("HoldFire", false);
 			}
 			else if (Input.GetButton("Fire1") && !freezeInput) {
 				if (ActiveWeapon.chargeUse && MVUtility.Geq(weaponPower, ActiveWeapon.WeaponUsage) && ActiveWeapon.fired) {
