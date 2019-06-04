@@ -6,6 +6,7 @@ namespace MV {
 	/// <summary>
 	/// Class for playing background music
 	/// </summary>
+	[ExecOrder(-75)]
 	public class MusicManager : MonoBehaviour {
 
 		#region static

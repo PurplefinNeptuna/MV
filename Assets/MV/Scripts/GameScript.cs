@@ -45,6 +45,7 @@ namespace MV {
 	/// <summary>
 	/// Core for MV functionality
 	/// </summary>
+	[ExecOrder(-70)]
 	public class GameScript : MonoBehaviour {
 		public Camera GameMainCamera;
 		public Canvas GameUICanvas;

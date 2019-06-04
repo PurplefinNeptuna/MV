@@ -146,6 +146,7 @@ namespace MV {
 	/// <summary>
 	/// Class for all world data
 	/// </summary>
+	[ExecOrder(-85)]
 	public class WorldManager : MonoBehaviour {
 		//public static WorldManager main;
 

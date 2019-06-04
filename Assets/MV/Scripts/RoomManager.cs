@@ -8,6 +8,7 @@ namespace MV {
 	/// <summary>
 	/// Class for managing active and available rooms
 	/// </summary>
+	[ExecOrder(-90)]
 	public class RoomManager : MonoBehaviour {
 		//public static RoomManager main;
 		public Dictionary<string, RoomData> rooms;

@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace MV {
 
+	[ExecOrder(-95)]
 	[RequireComponent(typeof(GameScript))]
 	[RequireComponent(typeof(WorldManager))]
 	[RequireComponent(typeof(RoomManager))]

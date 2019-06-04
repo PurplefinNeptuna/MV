@@ -8,6 +8,7 @@ namespace MV {
 	/// <summary>
 	/// Class for playing sounds
 	/// </summary>
+	[ExecOrder(-80)]
 	public class SoundManager : MonoBehaviour {
 
 		#region Static
