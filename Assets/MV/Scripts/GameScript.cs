@@ -47,8 +47,8 @@ namespace MV {
 	/// </summary>
 	[ExecOrder(-70)]
 	public class GameScript : MonoBehaviour {
+		[HideInInspector]
 		public Camera GameMainCamera;
-		public Canvas GameUICanvas;
 		[HideInInspector]
 		public GameScriptData data;
 		public bool testMode = false;
@@ -78,7 +78,6 @@ namespace MV {
 		[HideInInspector]
 		public bool win = false;
 		public GameObject VCamPlayer;
-		public GameObject VBossBattle;
 		[HideInInspector]
 		public GameObject room;
 		public GameObject healthDrop;
@@ -89,9 +88,6 @@ namespace MV {
 		public Dictionary<Vector3Int, WorldTile> tiles;
 		[HideInInspector]
 		public List<WorldTile> teleporter;
-		public Text scoreText;
-		public GameObject gameOverPanel;
-		public GameObject winPanel;
 		public LayerMask playerLayer;
 		public LayerMask playerCoreLayer;
 		public LayerMask enemyLayer;
@@ -116,6 +112,8 @@ namespace MV {
 			else if (MVMain.Core != this) {
 				Destroy(gameObject);
 			}
+
+			GameMainCamera = Camera.main;
 		}
 
 		private void Start() {
@@ -165,12 +163,6 @@ namespace MV {
 				TrapPlayerInRoom(bossBattle);
 			}
 			finalScore = Mathf.RoundToInt((float) score * MVMain.Difficulty.difficulty);
-		}
-
-		private void LateUpdate() {
-			if ((bossBattle && !VBossBattle.activeSelf) || (!bossBattle && !VCamPlayer.activeSelf)) {
-				StartCoroutine(SwitchCamera(bossBattle));
-			}
 		}
 
 		/// <summary>
@@ -230,12 +222,8 @@ namespace MV {
 		/// </summary>
 		private void SetCamera() {
 			CinemachineVirtualCamera playerVC = VCamPlayer.GetComponent<CinemachineVirtualCamera>();
-			CinemachineVirtualCamera bossVC = VBossBattle.GetComponent<CinemachineVirtualCamera>();
 			if (playerVC.Follow == null) {
 				playerVC.Follow = player.transform;
-			}
-			if (bossVC.Follow == null) {
-				bossVC.Follow = player.transform;
 			}
 
 			CinemachineFramingTransposer playerCamFT = VCamPlayer.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineFramingTransposer>();
@@ -253,10 +241,8 @@ namespace MV {
 				bound = room.transform.GetChild(0).GetComponent<PolygonCollider2D>();
 			}
 			CinemachineConfiner PlayerCamConfiner = VCamPlayer.GetComponent<CinemachineConfiner>();
-			CinemachineConfiner BossCamConfiner = VBossBattle.GetComponent<CinemachineConfiner>();
 
 			PlayerCamConfiner.m_BoundingShape2D = bound;
-			BossCamConfiner.m_BoundingShape2D = bound;
 
 			int numVcams = CinemachineCore.Instance.VirtualCameraCount;
 			for (int i = 0; i < numVcams; ++i) {
@@ -269,7 +255,6 @@ namespace MV {
 		/// </summary>
 		public void GameOver() {
 			SaveTimer();
-			gameOverPanel.SetActive(true);
 			dead = true;
 		}
 
@@ -277,7 +262,6 @@ namespace MV {
 		/// Method for respawn and reload last save
 		/// </summary>
 		private void Retry() {
-			gameOverPanel.SetActive(false);
 			player = Instantiate<GameObject>(playerPrefab, Vector3.zero, Quaternion.identity);
 			player.name = playerPrefab.name;
 			player.transform.SetAsFirstSibling();
@@ -293,8 +277,6 @@ namespace MV {
 		/// Method called when winning the game
 		/// </summary>
 		public void Win() {
-			scoreText.text = "score: " + finalScore;
-			winPanel.SetActive(true);
 			dead = true;
 			win = true;
 		}
@@ -320,33 +302,6 @@ namespace MV {
 				Destroy(room);
 				LoadRoom(source.transitionMode);
 			}
-		}
-
-		/// <summary>
-		/// Smooth camera transition when encounter/defeating bosses
-		/// </summary>
-		/// <param name="boss">is the boss exist?</param>
-		private IEnumerator SwitchCamera(bool boss) {
-			yield return new WaitForSeconds(1f);
-			int ppuScale = boss ? 40 : 64;
-			int resX = boss ? 960 : 1024;
-			int resY = boss ? 540 : 576;
-			Camera camera = Camera.main;
-			Rect crect = camera.rect;
-			PixelPerfectCamera PPC = camera.GetComponent<PixelPerfectCamera>();
-			CinemachinePixelPerfect CPP = camera.GetComponent<CinemachinePixelPerfect>();
-			CinemachineBrain CB = camera.GetComponent<CinemachineBrain>();
-			CPP.enabled = false;
-			PPC.enabled = false;
-			camera.rect = crect;
-			VBossBattle.SetActive(boss);
-			VCamPlayer.SetActive(!boss);
-			PPC.assetsPPU = ppuScale;
-			PPC.refResolutionX = resX;
-			PPC.refResolutionY = resY;
-			yield return new WaitForSeconds(CB.m_DefaultBlend.m_Time);
-			PPC.enabled = true;
-			CPP.enabled = true;
 		}
 
 		/// <summary>
