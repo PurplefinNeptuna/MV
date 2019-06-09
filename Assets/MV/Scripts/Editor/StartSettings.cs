@@ -63,7 +63,7 @@ public class StartSettings : Editor {
 	}
 
 	private static void CreateVCam(GameObject parent) {
-		GameObject vCamGO = new GameObject("MV VCam", typeof(CinemachineVirtualCamera), typeof(CinemachineFramingTransposer));
+		GameObject vCamGO = new GameObject("MV VCam", typeof(CinemachineVirtualCamera));
 		CinemachineVirtualCamera vCam = vCamGO.GetComponent<CinemachineVirtualCamera>();
 		GameObject owner = vCam.GetComponentOwner().gameObject;
 		owner.AddComponent(typeof(CinemachineFramingTransposer));
