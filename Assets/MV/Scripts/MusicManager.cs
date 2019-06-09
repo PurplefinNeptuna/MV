@@ -12,10 +12,7 @@ namespace MV {
 		#region static
 
 		private void Awake() {
-			if (MVMain.Music == null) {
-				MVMain.Music = this;
-			}
-			else if (MVMain.Music != this) {
+			if (MVMain.Music != this) {
 				Destroy(gameObject);
 			}
 		}

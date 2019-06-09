@@ -51,7 +51,9 @@ namespace MV {
 		public Camera GameMainCamera;
 		[HideInInspector]
 		public GameScriptData data;
+		[HideInInspector]
 		public bool testMode = false;
+		[HideInInspector]
 		public GameObject testRoom;
 		public GameObject playerPrefab;
 		[HideInInspector]
@@ -77,6 +79,7 @@ namespace MV {
 		public bool dead = false;
 		[HideInInspector]
 		public bool win = false;
+		[HideInInspector]
 		public GameObject VCamPlayer;
 		[HideInInspector]
 		public GameObject room;
@@ -106,10 +109,7 @@ namespace MV {
 		private ChunkData[, ] savedMap;
 
 		private void Awake() {
-			if (MVMain.Core == null) {
-				MVMain.Core = this;
-			}
-			else if (MVMain.Core != this) {
+			if (MVMain.Core != this) {
 				Destroy(gameObject);
 			}
 

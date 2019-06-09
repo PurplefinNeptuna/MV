@@ -14,10 +14,7 @@ namespace MV {
 		#region Static
 
 		private void Awake() {
-			if (MVMain.Sound == null) {
-				MVMain.Sound = this;
-			}
-			else if (MVMain.Sound != this) {
+			if (MVMain.Sound != this) {
 				Destroy(gameObject);
 			}
 		}

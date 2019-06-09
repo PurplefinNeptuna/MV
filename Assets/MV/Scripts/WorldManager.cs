@@ -312,10 +312,7 @@ namespace MV {
 		}
 
 		private void Awake() {
-			if (MVMain.World == null) {
-				MVMain.World = this;
-			}
-			else if (MVMain.World != this) {
+			if (MVMain.World != this) {
 				Destroy(gameObject);
 			}
 

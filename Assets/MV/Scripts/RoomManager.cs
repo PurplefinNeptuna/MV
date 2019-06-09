@@ -17,10 +17,7 @@ namespace MV {
 		public string spawnFrom = "O0";
 
 		private void Awake() {
-			if (MVMain.Room == null) {
-				MVMain.Room = this;
-			}
-			else if (MVMain.Room != this) {
+			if (MVMain.Room != this) {
 				Destroy(gameObject);
 			}
 
