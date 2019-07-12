@@ -9,10 +9,11 @@ using UnityEngine.Tilemaps;
 namespace MV {
 	public class RoomMaker : EditorWindow {
 
+		private SerializedObject settings;
 		private string roomName = "Room Name";
-		private string roomBasePath = "Assets/Resources/Prefabs/RoomBase.prefab";
-		private string scriptablePath = "Assets/Resources/RoomsData/";
-		private string assetPath = "Assets/Resources/Rooms/";
+		private string roomBasePath = "Assets/MV/Resources/Prefabs/RoomBase.prefab";
+		private string scriptablePath;
+		private string assetPath;
 		private string changedString = "None";
 		private bool[, ] toggled;
 		private bool[, ] oldToggled;
@@ -39,6 +40,9 @@ namespace MV {
 		}
 
 		private void OnEnable() {
+			settings = MVSettings.GetSerializedSettings();
+			scriptablePath = (string) MVEditorUtils.GetValue(settings.FindProperty("roomDataPath"));
+			assetPath = (string) MVEditorUtils.GetValue(settings.FindProperty("roomPrefabPath"));
 			roomBase = PrefabUtility.LoadPrefabContents(roomBasePath);
 			roomMusic = Resources.Load<MusicData>("MusicData/level1");
 			roomStage = Resources.Load<StageData>("StageData/Default");

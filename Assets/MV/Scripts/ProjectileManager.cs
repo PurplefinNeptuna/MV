@@ -28,7 +28,7 @@ namespace MV {
 		public GameObject Spawn(Vector2 worldPos, float speed, Vector2 direction, bool friendly, GameObject source, int damage = 5, string projectileName = "Bullet", string behaviourName = "DefaultBullet", Color? color = null, string sound = null) {
 			Type type;
 			Color targetColor;
-			GameObject prefab = Resources.Load<GameObject>("Prefabs/Projectiles/" + projectileName);
+			GameObject prefab = Resources.Load<GameObject>(MVMain.settings.GetProjectilPath() + projectileName);
 			try {
 				type = Type.GetType(behaviourName);
 			}

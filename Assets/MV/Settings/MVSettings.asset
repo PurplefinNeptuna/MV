@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55445c7f0a3ed4fbd9a1265af1622c84, type: 3}
   m_Name: MVSettings
   m_EditorClassIdentifier: 
-  m_Number: 0
-  m_SomeString: 
+  enemyPrefabPath: Prefabs/Enemies
+  projectilePrefabPath: Prefabs/Projectiles
+  roomPrefabPath: Rooms
+  roomDataPath: RoomData

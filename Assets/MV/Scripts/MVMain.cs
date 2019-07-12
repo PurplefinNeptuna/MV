@@ -41,6 +41,8 @@ namespace MV {
 
 		private static MVMain _main_;
 
+		public static MVSettings settings;
+		
 		private void Awake() {
 			if (_main_ == null) {
 				_main_ = this;
@@ -49,6 +51,7 @@ namespace MV {
 				Destroy(gameObject);
 			}
 
+			settings = MVSettings.GetSettings();
 			Enemy = new EnemyManager();
 			Difficulty = new DifficultyManager();
 			Projectile = new ProjectileManager();
