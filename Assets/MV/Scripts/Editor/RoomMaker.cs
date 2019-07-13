@@ -9,7 +9,7 @@ using UnityEngine.Tilemaps;
 namespace MV {
 	public class RoomMaker : EditorWindow {
 
-		private SerializedObject settings;
+		private MVSettings settings;
 		private string roomName = "Room Name";
 		private string roomBasePath = "Assets/MV/Resources/Prefabs/RoomBase.prefab";
 		private string scriptablePath;
@@ -40,12 +40,13 @@ namespace MV {
 		}
 
 		private void OnEnable() {
-			settings = MVSettings.GetSerializedSettings();
-			scriptablePath = (string) MVEditorUtils.GetValue(settings.FindProperty("roomDataPath"));
-			assetPath = (string) MVEditorUtils.GetValue(settings.FindProperty("roomPrefabPath"));
+			settings = MVSettings.GetSettings();
+			Debug.Log(settings);
+			scriptablePath = settings.roomDataPath + "/";
+			assetPath = settings.roomPrefabPath + "/";
 			roomBase = PrefabUtility.LoadPrefabContents(roomBasePath);
-			roomMusic = Resources.Load<MusicData>("MusicData/level1");
-			roomStage = Resources.Load<StageData>("StageData/Default");
+			//roomMusic = Resources.Load<MusicData>("MusicData/level1");
+			//roomStage = Resources.Load<StageData>("StageData/Default");
 			roomBackground = Resources.Load<Sprite>("Sprites/bg");
 			targetSize = new Rect(0, 0, 24, 16);
 			toggled = new bool[5, 5];
@@ -198,8 +199,12 @@ namespace MV {
 
 			GameObject result = PrefabUtility.SaveAsPrefabAsset(roomBase, path);
 			roomData.Room = result;
-			roomData.BGM_Name = roomMusic.name;
-			roomData.stage = roomStage.name;
+			if (roomMusic != null) {
+				roomData.BGM_Name = roomMusic.name;
+			}
+			if (roomStage != null) {
+				roomData.stage = roomStage.name;
+			}
 			roomData.chunkSize = new Vector2Int(bgChunkSize.y, bgChunkSize.x);
 			roomData.chunkTopLeft = minIdx;
 			AssetDatabase.CreateAsset(roomData, scriptableResultPath);

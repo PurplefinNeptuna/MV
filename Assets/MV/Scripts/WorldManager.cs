@@ -193,7 +193,7 @@ namespace MV {
 							nowChunk.roomName = now.Item1;
 							nowChunk.localChunkPos = new Vector2Int(i, j);
 							//nowChunk.roomColor = roomNow.mapColor;
-							nowChunk.roomColor = Resources.Load<StageData>("StageData/" + roomNow.stage).color;
+							nowChunk.roomColor = Resources.Load<StageData>(MVMain.settings.stageDataPath + roomNow.stage).color;
 							bool up = false;
 							bool down = false;
 							bool left = false;

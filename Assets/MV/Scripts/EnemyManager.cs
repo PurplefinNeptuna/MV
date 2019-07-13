@@ -18,7 +18,7 @@ namespace MV {
 		/// <returns>GameObject of spawned enemy</returns>
 		public GameObject Spawn(Vector2 worldPos, string enemyName = "Spike", string behaviourName = "Spike", string layer = "Enemy") {
 			Type type;
-			GameObject prefab = Resources.Load<GameObject>(MVMain.settings.GetEnemyPath() + enemyName);
+			GameObject prefab = Resources.Load<GameObject>(MVMain.settings.enemyPrefabPath + enemyName);
 			try {
 				type = Type.GetType(behaviourName);
 			}

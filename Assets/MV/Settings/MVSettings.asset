@@ -14,5 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPrefabPath: Prefabs/Enemies
   projectilePrefabPath: Prefabs/Projectiles
-  roomPrefabPath: Rooms
-  roomDataPath: RoomData
+  soundPath: Sounds
+  musicDataPath: MusicData
+  stageDataPath: StageData
+  roomPrefabPath: Assets/Resources/Rooms
+  roomDataPath: Assets/Resources/RoomData

@@ -31,7 +31,7 @@ namespace MV {
 			soundList = new HashSet<string>();
 			audioSource = GetComponents<AudioSource>();
 			soundDic = new Dictionary<string, AudioClip>();
-			sounds = Resources.LoadAll<AudioClip>("Sounds").ToList();
+			sounds = Resources.LoadAll<AudioClip>(MVMain.settings.soundPath).ToList();
 			foreach (AudioClip clip in sounds) {
 				soundDic.Add(clip.name, clip);
 			}

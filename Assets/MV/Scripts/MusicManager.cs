@@ -30,7 +30,7 @@ namespace MV {
 		/// <param name="musicName">Name in MusicData</param>
 		public void Play(string musicName) {
 			if (musicName != audioSource.clip?.name) {
-				MusicData music = Resources.Load<MusicData>("MusicData/" + musicName);
+				MusicData music = Resources.Load<MusicData>(MVMain.settings.musicDataPath + musicName);
 				if (music == null)
 					return;
 

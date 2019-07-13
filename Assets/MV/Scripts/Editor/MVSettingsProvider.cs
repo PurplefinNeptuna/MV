@@ -13,6 +13,9 @@ namespace MV {
 		class Styles {
 			public static GUIContent enemyPath = new GUIContent("Enemy Prefab Path");
 			public static GUIContent projPath = new GUIContent("Projectile Prefab Path");
+			public static GUIContent sndPath = new GUIContent("Sound Path");
+			public static GUIContent mscPath = new GUIContent("Music Data Path");
+			public static GUIContent stgPath = new GUIContent("Stage Data Path");
 			public static GUIContent roomGOPath = new GUIContent("Room Prefab Path");
 			public static GUIContent roomDataPath = new GUIContent("Room Data Path");
 		}
@@ -35,6 +38,9 @@ namespace MV {
 			// Use IMGUI to display UI:
 			EditorGUILayout.PropertyField(m_CustomSettings.FindProperty("enemyPrefabPath"), Styles.enemyPath);
 			EditorGUILayout.PropertyField(m_CustomSettings.FindProperty("projectilePrefabPath"), Styles.projPath);
+			EditorGUILayout.PropertyField(m_CustomSettings.FindProperty("soundPath"), Styles.sndPath);
+			EditorGUILayout.PropertyField(m_CustomSettings.FindProperty("musicDataPath"), Styles.mscPath);
+			EditorGUILayout.PropertyField(m_CustomSettings.FindProperty("stageDataPath"), Styles.stgPath);
 			EditorGUILayout.PropertyField(m_CustomSettings.FindProperty("roomPrefabPath"), Styles.roomGOPath);
 			EditorGUILayout.PropertyField(m_CustomSettings.FindProperty("roomDataPath"), Styles.roomDataPath);
 

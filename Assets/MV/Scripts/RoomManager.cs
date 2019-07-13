@@ -21,7 +21,7 @@ namespace MV {
 				Destroy(gameObject);
 			}
 
-			rooms = Resources.LoadAll<RoomData>("RoomsData").ToDictionary(x => x.name, x => x);
+			rooms = Resources.LoadAll<RoomData>(MVMain.settings.roomDataPath).ToDictionary(x => x.name, x => x);
 
 			if (activeRoomName == null || activeRoomName == "") {
 				activeRoomName = rooms.First().Value.name;
