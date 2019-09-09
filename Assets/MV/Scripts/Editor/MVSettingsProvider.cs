@@ -31,7 +31,7 @@ namespace MV {
 
 		public override void OnActivate(string searchContext, VisualElement rootElement) {
 			// This function is called when the user clicks on the MyCustom element in the Settings window.
-			m_CustomSettings = MVSettings.GetSerializedSettings();
+			m_CustomSettings = new SerializedObject(MVSettings.GetSettingsInEditor());
 		}
 
 		public override void OnGUI(string searchContext) {
@@ -51,7 +51,7 @@ namespace MV {
 		[SettingsProvider]
 		public static SettingsProvider CreateMyCustomSettingsProvider() {
 			if (!IsSettingsAvailable()) {
-				MVSettings.GetSerializedSettings();
+				MVSettings.GetSettingsInEditor();
 			}
 			if (IsSettingsAvailable()) {
 				var provider = new MVSettingsProvider("Project/MVSettingsProvider", SettingsScope.Project);

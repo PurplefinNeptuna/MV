@@ -25,8 +25,8 @@ namespace MV {
 			return settings;
 		}
 
-		public static SerializedObject GetSerializedSettings() {
-			return new SerializedObject(GetOrCreateSettings());
+		public static MVSettings GetSettingsInEditor() {
+			return GetOrCreateSettings();
 		}
 
 		public static MVSettings GetSettings() {
